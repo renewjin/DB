@@ -154,4 +154,121 @@ SELECT * FROM employee WHERE dept_code IS NULL;
 -- EMPLOYEE 테이블에서 DEPT_CODE가 있는 사원 조회
 SELECT * FROM employee WHERE dept_code IS NOT NULL;
 
+/*
+컬럼명 BETWEEN (A) AND (B)
+-- 컬럼의 값이 A이상 B이하면 TRUE
+
+컬럼명 NOT BETWEEN (A) AND (B)
+-- 컬럼의 값이 A이상 B이하면 FALSE
+-- 컬럼의 값이 A미만 또는 B초과시 TRUE
+*/
+
+-- 월급이 300이상 500이하
+SELECT EMP_NAME, SALARY FROM employee WHERE SALARY BETWEEN 3000000 AND 5000000;
+
+-- 월급이 300 미만이거나 500 초과일 때
+SELECT EMP_NAME, SALARY FROM employee WHERE SALARY NOT BETWEEN 3000000 AND 5000000;
+
+/*
+WHERE OR 사용해서 값1, 값2, 값3, ... 과 같은 표시를 진행하기도 함
+
+컬럼명 IN (값1, 값2, 값3, ...)
+-- 컬럼의 값 ()내 값과 일치하면 TRUE
+
+컬럼명 NOT IN (값1, 값2, 값3, ...)
+-- 컬럼의 값이 ()내 값과 일치하면 FALSE
+-- 컬럼의 값이 ()내 값과 일치하지 않으면 TRUE
+*/
+
+------------------------------
+/*OR 사용*/
+-- EMPLOYEE 테이블에서
+-- 부서코드가 D5 D6 D9 인 사원의 이름 부서코드 급여
+SELECT EMP_NAME, DEPT_CODE, SALARY FROM employee WHERE dept_code = 'D5' OR dept_code = 'D6' OR dept_code = 'D9';
+
+/*IN 사용*/
+SELECT EMP_NAME, DEPT_CODE, SALARY FROM employee WHERE dept_code IN('D5', 'D6', 'D9');
+/*NOT IN 사용*/
+SELECT EMP_NAME, DEPT_CODE, SALARY FROM employee WHERE dept_code NOT IN('D5', 'D6', 'D9');
+
+------------------------------
+
+/*
+LIKE
+비교하려는 값이 특정한 패턴을 만족시키면 조회하는 연산자
+WHERE 컬럼명 LIKE '패턴'
+
+%(포함)
+- %A : 문자열이 앞은 어떤 문자든 포함되고 마지막은 A
+    예 : %륨 검색창에 륨으로 끝나는 단어를 검색한 것과 비슷
+
+- A% : 문자열에서 A로 시작하고 끝나는 것은 상관 없음
+    예 : 림% 검색창에서 림으로 시작하는 단어를 검색한 것과 비슷
+    
+- %A% : 문자열 시작과 끝문자는 관계 없이 중간에 A가 들어가면 됨
+    예 : %로% 검색창에서 로가 중간에 들어가는 단어를 검색한 것과 비슷
+    
+글자수
+
+- A_ : A뒤에 아무거나 한 글자만 있는 문자열
+    예 : AB, A1, AQ, A가
+        가_ : 가로 시작하는 두글자 단어만 검색
+        나__ : 나로 시작하는 세글자 단어만 검색
+        
+- _A : A앞에 아무거나 한 글자만 있는 문자열
+    예 : BA, 1A, QA, 가A
+        _가 : 가로 끝나는 두글자 단어만 검색
+        __나 : 나로 끝나는 세글자 단어만 검색
+*/
+
+-- EMPLOYEE에서 성이 전씨인 사원의 사번 이름 조회
+SELECT EMP_ID, EMP_NAME FROM employee WHERE emp_name LIKE '전%';
+
+-- EMPLOYEE에서 이름이 수로 끝나는 사원의 사번, 이름 조회
+SELECT EMP_ID, EMP_NAME FROM employee WHERE emp_name LIKE '%수';
+
+-- EMPLOYEE에서 하가 포함되는 사원의 사번, 이름 조회
+SELECT EMP_ID, EMP_NAME FROM employee WHERE emp_name LIKE '%하%';
+
+-- EMPLOYEE에서 이름이 전으로 시작하고 돈으로 끝나는 사원의 사번, 이름 조회
+SELECT EMP_ID, EMP_NAME FROM employee WHERE EMP_NAME LIKE '전%돈';
+
+
+
+-- ESCAPE 옵션 : LIKE 의미를 벗어나 단순 문자열로 인식
+--> 적용범위 : 특수문자 뒤 한글자
+SELECT EMP_NAME, EMAIL FROM employee WHERE EMAIL LIKE '___#_%' ESCAPE '#';
+/*
+___ 세글자 의미
+ESCAPE '#' 구분을 지을 것이다.
+___LIKE 사용하는 3글자만 찾으라는 의미로 구분짓는 것
+_% -> _로된 글자 찾기
+
+___#_% __@%
+_를 @ 처럼 사용하길 원했기 때문에 중간 # 넣어준 것
+___#_%__돈%
+_를 돈 처럼 사용하길 원했기 때문에 중간 # 넣어준 것
+
+LIKE'__#@% ESCAPE #에서  문자그대로 @의미
+ESCAPE에 들어가는 한글자들어가는데 이때 #말고 다른문자 사용가능
+ESCAPE와 %사이에는 한글자만 들어감
+*/
+
+
+/*
+DUAL(DUmmy tAbLe)
+Dummy : 실제로 사용되지 않는 데이터
+더미테이블 : 실제로 존재하지 않는 테이블
+        -> 단순히 데이터를 조회하거나 확인할 때 사용
+*/
+
+-- 존재하지 않는 테이블을 이용해서 현재시간 확인하기
+SELECT SYSDATE, SYSTIMESTAMP FROM DUAL;
+
+
+
+
+
+
+
 

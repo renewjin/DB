@@ -103,3 +103,115 @@ FROM DUAL;
  FROM employee
  ORDER BY "이메일 아이디";
  
+ -- 앞에서 부터 값을 가지고 올 때는 +를 작성해주지만
+ -- 뒤에서 부터 값을 가지고오길 원할 때는 -를 작성
+SELECT PHONE, SUBSTR(PHONE, -4) AS "마지막_네_자리"
+FROM employee;
+
+SELECT EMP_NAME, SUBSTR(EMAIL, INSTR(EMAIL, '@')+1) 
+FROM employee;
+
+/************ 그룹 관련 함수 ***********/
+
+-- COUNT 행의 총 개수를 셀 때 사용하는 함수
+
+/*
+COUNT 사용 방법
+COUNT(*) : 조회된 모든  행의 개수 반환 -> 이름, 주소 와 같은 항목이 몇개 있는가?
+COUNT(컬럼명) : 지정된 컬럼 값이 NULL이 아닌 행의 개수 반환 
+               (NULL은 제외한 개수를 작성)
+               
+COUNT(DISTINCT 컬럼명) : 지정된 컬럼에서 중복 값을 제외한 행의 개수 반환
+
+*/
+
+-- EMPLOYEE 테이블 전체 행의 개수
+SELECT COUNT(*) FROM employee;
+
+-- 전화번호가 존재하는 사원의 수
+SELECT COUNT(PHONE) FROM employee;
+SELECT COUNT(*) FROM employee WHERE PHONE IS NOT NULL;
+
+-- 전화번호가 존재하지 않는 사원의 수
+SELECT COUNT(*) FROM employee WHERE PHONE IS NULL;
+
+
+-- AVG
+-- 모든 사원의 평균 급여 조회
+SELECT AVG(SALARY)
+FROM employee;
+
+-- 올림 내림 반올림 활용해서 정수로 출력
+-- 올림 CEIL
+SELECT CEIL(AVG(SALARY))
+FROM employee;
+
+-- 반올림 ROUND
+SELECT ROUND(AVG(SALARY))
+FROM employee;
+
+-- 내림 FLOOR
+SELECT FLOOR(AVG(SALARY))
+FROM employee;
+
+/*
+**** TRIM ****
+ TRIM( [ [옵셥] 문자열 | 컬럼명 FROM ] 문자열 | 컬럼명)
+ 
+ 주어진 문자열의 앞쪽 | 뒤쪽 | 양쪽에 존재하는 지정된 문자열 제거
+ 
+ -- 옵션 앞쪽(lEADING)
+        뒤쪽(TRAILING)
+        양쪽(BOTH) // 기본값
+        
+*/
+
+SELECT '      점     심     ',
+TRIM(LEADING' ' FROM'      점     심     ') --앞쪽 공백 제거
+FROM DUAL;
+
+SELECT '      점     심     ',
+TRIM(LEADING'  ' FROM'      점     심     ') --TRIM 에서 '  ' 공백 두개 작성
+FROM DUAL;
+/*
+-- TRIM 의 경우 문자열 1개만 가능
+
+ORA-30001: trim set should have only one character
+30001. 00000 -  "trim set should have only one character"
+*Cause:    Trim set contains more or less than 1 character. This is not
+           allowed in TRIM function.
+*/
+
+SELECT '      점     심     ',
+TRIM(TRAILING' ' FROM'      점     심     ') --뒤쪽 공백 제거
+FROM DUAL;
+-- 육안상 뒤쪽 공백 제거한 것이 보이지 않을수 있으나 뒤쪽 공백이 제거된 상태에서 출력
+
+SELECT '      점     심     ',
+TRIM(BOTH' ' FROM'      점     심     ') --양쪽 공백 제거
+FROM DUAL;
+
+SELECT '      점     심     ',
+TRIM(' ' FROM'      점     심     ') --양쪽 공백 제거
+FROM DUAL;
+
+-- 앞쪽 뒤쪽 양쪽 공백 제거 한번에 사용하기
+SELECT '      점     심     ',
+TRIM(LEADING' ' FROM'      점     심     '),
+TRIM(TRAILING' ' FROM'      점     심     '),
+TRIM(' ' FROM'      점     심     ')
+FROM DUAL;
+
+
+/*
+REPLACE : 특정 문자열을 대체할 때 사용
+
+사용방법
+(문자열 | 컬럼명, 찾을 문자열, 바꿀 문자열)
+*/
+
+-- NATIONAL 테이블에서 한국으로 적혀있는 글자를 대한민국으로 변경하기
+SELECT * FROM national;
+
+SELECT NATIONAL_CODE, NATIONAL_NAME, REPLACE(NATIONAL_NAME, '한국', '대한민국') FROM national;
+SELECT REPLACE(NATIONAL_NAME, '한국', '대한민국') FROM national;

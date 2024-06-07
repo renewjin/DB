@@ -327,7 +327,17 @@ AND MAX(AVG(POINT)) = (SELECT MAX(AVG(POINT))
                         FROM tb_grade G
                         JOIN tb_department D);
                         
-
+SELECT STUDENT_NO, STUDENT_NAME
+FROM
+    (SELECT STUDENT_NO, STUDENT_NAME, AVG(POINT) 평점
+    FROM TB_GRADE
+    JOIN TB_STUDENT USING(STUDENT_NO)
+    WHERE DEPARTMENT_NO  = (SELECT DEPARTMENT_NO
+                            FROM TB_DEPARTMENT
+                            WHERE DEPARTMENT_NAME = '국어국문학과')
+    GROUP BY STUDENT_NO, STUDENT_NAME
+    ORDER BY 평점 DESC)
+WHERE ROWNUM = 1;
 
 -- 19번
 -- 춘 기술대학교의 "환경조경학과"가 속한 같은 계열 학과들의 
